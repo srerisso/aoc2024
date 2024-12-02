@@ -52,3 +52,20 @@ print(f"List D: {sum_list(D)}")
 
 # multiply number from list A * times that it appears in list B
 # sum all the results
+
+# function ocurrence_in_list. Returns the number of times an element appears in a list
+def ocurrence_in_list(el, L):
+    count = 0
+    for i in range(len(L)):
+        if el == L[i]:
+            count += 1
+    return count
+
+# function similarity_score. Returns the similarity score between two lists
+def similarity_score(A, B):
+    score = 0
+    for i in range(len(A)):
+        score += A[i] * ocurrence_in_list(A[i], B)
+    return score
+
+print(f"Similarity score: {similarity_score(A, B)}")    
