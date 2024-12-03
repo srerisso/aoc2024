@@ -24,34 +24,30 @@ def extract_numbers(file1):
 # security checks :
 # - The levels are either all increasing or all decreasing.
 # - Any two adjacent levels differ by at least one and at most three
-def level_security(A):
-    secure = 0
-    for j in range(len(A) - 1):
-        if A[j] < A[j + 1]:
-            if A[j + 1] - A[j] > 3:
-                secure = 0
-                break
-            else:
-                secure = 1
-        elif A[j] > A[j + 1]:
-            if A[j] - A[j + 1] > 3:
-                secure = 0
-                break
-            else:
-                secure = 1
-        else:
-            secure = 0
-            break
-    return secure
+# def level_security(A):
+#     secure = 0
+#     for j in range(len(A) - 1):
+#         if A[j] < A[j + 1]:
+#             if A[j + 1] - A[j] > 3:
+#                 secure = 0
+#                 break
+#             else:
+#                 secure = 1
+#         elif A[j] > A[j + 1]:
+#             if A[j] - A[j + 1] > 3:
+#                 secure = 0
+#                 break
+#             else:
+#                 secure = 1
+#         else:
+#             secure = 0
+#             break
+#     return secure
 
 # function level_security2. Given a list of levels, test if security checks are passed.
 # Using list_increase and list_decrease functions
-def level_security2(A):
+def level_security(A):
     secure = 0
-
-    
-    if list_decrease(A) == 1:
-        secure = 1
 
     for j in range(len(A) - 1):
         if list_increase(A) == 1:
@@ -90,7 +86,7 @@ def list_decrease(A):
     return 1    
 
 # listA = extract_numbers('day2_input_test.txt')
-listA = extract_numbers('day2_input.txt')
+listA = extract_numbers('day2_input_test.txt')
 listA.reverse()
 print(f"List A: {listA}")
 
@@ -104,10 +100,80 @@ print(f"List A: {listA}")
 i=0
 count_safes = 0
 
-for e in map(level_security2, listA):
+for e in map(level_security, listA):
     # print(f"Lista {i+1} is Secure: {e}")
     if e == 1:
         count_safes = count_safes + 1
     i=i+1
     
 print(f"Number of secure lists: {count_safes}")
+
+
+# Part 2
+# Problem Dampener
+
+# Cases where the Problem Dampener can remove a level :
+#     - Next element is equal than actual element. Then remove actual element. 
+#     - 
+
+
+# list_incremental_dampener. 
+# Given a list, returns all increments between elements 
+def list_increments(eleA):
+    inc = []
+    i = 0
+    
+    for i in range(len(eleA) - 1):
+        inc.append(eleA[i + 1] - eleA[i])
+    return inc
+
+for el in listA:
+    print(f"List increments: {list_increments(el)}")    
+
+
+# list_increments scenarios, to be analyzed by Problem Dampener
+#
+# - all negative, no increment greater than 3 => Level is secure (1)
+# - all positive, no increment greater than 3 => Level is secure (1)
+# - all positive, but one negative, and no increment greater than 3 => Level secure (1) when negative is deleted
+# - all negative, but one positive and no increment greater than 3 => Level secure (1) when positive is deleted
+
+# function check_list_sign. check multiplication sign of list elements => must be always positive (4 elements negatives, or 4 elements positives)
+def check_list_sign(listA):
+    x = 1
+    for i in range(len(listA)):
+        x = x * listA[i]
+    return x
+
+
+# function find_different_signs. Given a list, return position of element(s) of different sign
+def find_different_signs(listA):
+    for i in range(len(listA) - 1):
+        if listA[i] * listA[i + 1] < 0:
+            return i
+    return i
+
+# function all_incs_below_3. Given a list, returns 1 if all increments are below 3 (in absolute value), 0 otherwise
+def all_incs_below_3(listA):
+    for i in range(len(listA) - 1):
+        if abs(listA[i + 1] - listA[i]) > 3:
+            return 0
+    return 1
+
+# function problem_dampener. Given a list of levels, test if security checks are passed.
+def problem_dampener(listA):
+    secure = 0
+
+    for j in range(len(listA) - 1):
+        if all_incs_below_3(listA) == 1:
+            if check_list_sign(listA) > 0:
+                secure = 1
+                break
+            else:
+                # find position of different signs
+        else :
+            secure = 0
+            break
+
+    return secure
+
