@@ -48,33 +48,49 @@ def level_security(A):
 # Using list_increase and list_decrease functions
 def level_security2(A):
     secure = 0
+
     
-    if list_increase(A) == 0 or list_decrease(A) == 0:
-        secure = 0      
-    else:
-        for j in range(len(A) - 1):
+    if list_decrease(A) == 1:
+        secure = 1
+
+    for j in range(len(A) - 1):
+        if list_increase(A) == 1:
             if abs(A[j + 1] - A[j]) > 3:
                 secure = 0
                 break
             else:
                 secure = 1
+        elif list_decrease(A) == 1:   
+            if abs(A[j] - A[j + 1]) > 3:
+                secure = 0
+                break
+            else:
+                secure = 1
+
     return secure
+
+
 
 # function list_increase. Returns 1 if the list is increasing, 0 otherwise
 def list_increase(A):
-    for i in range(len(A) - 1):
-        if (A[i] > A[i + 1]) or (A[i] == A[i + 1]):
+    j=0
+    
+    for j in range(len(A) - 1):
+        if (A[j] > A[j + 1]) or (A[j] == A[j + 1]):
             return 0
     return 1
 
 # function list_decrease. Returns 1 if the list is decreasing, 0 otherwise
 def list_decrease(A):
-    for i in range(len(A) - 1):
-        if (A[i] < A[i + 1]) or (A[i] == A[i + 1]):
+    k=0
+    
+    for k in range(len(A) - 1):
+        if (A[k] < A[k+ 1]) or (A[k] == A[k+ 1]):
             return 0
     return 1    
 
-listA = extract_numbers('day2_input_test.txt')
+# listA = extract_numbers('day2_input_test.txt')
+listA = extract_numbers('day2_input.txt')
 listA.reverse()
 print(f"List A: {listA}")
 
@@ -86,7 +102,12 @@ print(f"List A: {listA}")
 #     print(f"List is decreasing: {u}")
 
 i=0
+count_safes = 0
 
 for e in map(level_security2, listA):
-    print(f"Lista {i} is Secure: {e}")
+    # print(f"Lista {i+1} is Secure: {e}")
+    if e == 1:
+        count_safes = count_safes + 1
     i=i+1
+    
+print(f"Number of secure lists: {count_safes}")
