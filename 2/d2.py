@@ -113,12 +113,11 @@ print(f"Number of secure lists: {count_safes}")
 # Problem Dampener
 
 # Cases where the Problem Dampener can remove a level :
-#     - Next element is equal than actual element. Then remove actual element. 
-#     - 
+#     - Next element is equal than actual element. Then remove actual element.
 
 
-# list_incremental_dampener. 
-# Given a list, returns all increments between elements 
+# list_incremental_dampener.
+# Given a list, returns all increments between elements
 def list_increments(eleA):
     inc = []
     i = 0
@@ -127,8 +126,8 @@ def list_increments(eleA):
         inc.append(eleA[i + 1] - eleA[i])
     return inc
 
-for el in listA:
-    print(f"List increments: {list_increments(el)}")    
+# for el in listA:
+#     print(f"List increments: {list_increments(el)}")
 
 
 # list_increments scenarios, to be analyzed by Problem Dampener
@@ -138,23 +137,8 @@ for el in listA:
 # - all positive, but one negative, and no increment greater than 3 => Level secure (1) when negative is deleted
 # - all negative, but one positive and no increment greater than 3 => Level secure (1) when positive is deleted
 
-# function check_list_sign. check multiplication sign of list elements => must be always positive (4 elements negatives, or 4 elements positives)
-def check_list_sign(listA):
-    x = 1
-    for i in range(len(listA)):
-        x = x * listA[i]
-    return x
-
-
-# function find_different_signs. Given a list, return position of element(s) of different sign
-def find_different_signs(listA):
-    for i in range(len(listA) - 1):
-        if listA[i] * listA[i + 1] < 0:
-            return i
-    return i
-
-# function all_incs_below_3. Given a list, returns 1 if all increments are below 3 (in absolute value), 0 otherwise
-def all_incs_below_3(listA):
+# function all_incs_below_4. Given a list, returns 1 if all increments are below 3 (in absolute value), 0 otherwise
+def all_incs_below_4(listA):
     for i in range(len(listA) - 1):
         if abs(listA[i + 1] - listA[i]) > 3:
             return 0
@@ -165,15 +149,20 @@ def problem_dampener(listA):
     secure = 0
 
     for j in range(len(listA) - 1):
-        if all_incs_below_3(listA) == 1:
+        if all_incs_below_4(listA) == 1:
             if check_list_sign(listA) > 0:
                 secure = 1
                 break
             else:
-                # find position of different signs
-        else :
-            secure = 0
-            break
-
+                find_different_signs(listA)
+            
     return secure
 
+i = 0
+
+for el in listA:
+    i = i+1
+    # print(f"List increments: {list_increments(el)}")
+    print(f"List {i} increments: {list_increments(el)}")
+    print(f"All incs below 4 in list {i} ?: {all_incs_below_4(el)}")
+    print(f"Different signs in list {i} ?: {find_different_signs(el)}")
