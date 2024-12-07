@@ -137,7 +137,7 @@ for el in listA:
     # print(f"List increments: {list_increments(el)}")
     increments_list.append(list_increments(el))
 
-print(f"increments_list: {increments_list}")
+# print(f"increments_list: {increments_list}")
 
 # def any_inc_change(listA):
     
@@ -150,29 +150,19 @@ def all_incs_below_4(listA):
     return 1
 
 # function problem_dampener. Given a list of levels, test if security checks are passed.
-def problem_dampener(listA):
+def problem_dampener(listA, increments_list):
     secure = 0
+    secure_list = listA
     
-    if all_incs_below_4(listA) == 1:
-        secure = 1
-    else:
-        for el in range(len(listA) - 1):
-            if listA[el] == listA[el + 1]:
-                del listA[el]
-                print(f"List after deleting: {listA}")
-                secure = 1
-            elif (listA[el] > 0 and listA[el + 1] < 0) or (listA[el] < 0 and listA[el + 1] > 0):
-                if abs(listA[el + 1] - listA[el]) > 3:
-                    del listA[el]
-                    secure = 1
-                else:
-                    secure = 0
-                    break
-            else:
-                secure = 0
-                break
+    for inc_el in range(len(increments_list)-1):
+        if all_incs_below_4(increments_list[inc_el]) == 1:
+            secure = 1
+        else:
+            secure = 0
+            del increments_list[inc_el]
+            del secure_list[inc_el]
 
-    return secure
+    return secure_list
 
 i = 0
 
@@ -183,10 +173,11 @@ i = 0
 #     print(f"All incs below 4 in list {i} ?: {all_incs_below_4(el)}")
 #     print(f"Different signs in list {i} ?: {find_different_signs(el)}")
 
-for el in listA:
-    print(f"List secure {i}: {problem_dampener(el)}")
-    i += 1
+# for el in listA:
+#     print(f"List secure {i}: {problem_dampener(el)}")
+#     i += 1
 
+print(f"problem_dampener: {problem_dampener(listA, increments_list)}")
 
 print(f"Increments list (print2): {increments_list}")
-print(f"List A (print 2): {listA}")
+# print(f"List A (print 2): {listA}")
