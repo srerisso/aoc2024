@@ -86,7 +86,7 @@ def list_decrease(A):
 # listA = extract_numbers('day2_input_test.txt')
 listA = extract_numbers('day2_input_test.txt')
 listA.reverse()
-print(f"listA: {listA}")
+# print(f"listA: {listA}")
 
 # for t in map(list_increase, listA):
 #     print(f"List is increasing: {t}")
@@ -144,33 +144,41 @@ for el in listA:
 
 # function all_incs_below_4. Given a list, returns 1 if all increments are below 3 (in absolute value), 0 otherwise
 def all_incs_below_4(listA):
+    below = 1
+    
     for i in range(len(listA) - 1):
-        if abs(listA[i + 1] - listA[i]) > 3:
-            return 0
-    return 1
+        if abs(listA[i]) > 3:
+            below = 0
+            break
+    return below
 
-# function problem_dampener. Given a list of levels, test if security checks are passed.
+# function problem_dampener. Given a list of levels, and a list of increments of those levels, test if security checks are passed, and apply selected corrections to make levels secure
 def problem_dampener(listA, increments_list):
     secure = 0
+    i = 0
     secure_list = listA
+    secure_increments_list = increments_list
     
     for inc_el in range(len(increments_list)-1):
         if all_incs_below_4(increments_list[inc_el]) == 1:
             secure = 1
+            print(f"List {increments_list[inc_el]} is secure")
         else:
             secure = 0
-            del increments_list[inc_el]
+            print(f"List {increments_list[inc_el]} is not secure")
+            del secure_increments_list[inc_el]
             del secure_list[inc_el]
-
-    return secure_list
+        # i += 1
+    return secure_list, secure_increments_list
 
 i = 0
 
-# for el in listA:
-#     i = i+1
-#     # print(f"List increments: {list_increments(el)}")
+print(f"List A: {listA}")
+print(f"Increments_list: {increments_list}")
 #     print(f"List {i} increments: {list_increments(el)}")
+# for el in increments_list:
 #     print(f"All incs below 4 in list {i} ?: {all_incs_below_4(el)}")
+#     i +=1
 #     print(f"Different signs in list {i} ?: {find_different_signs(el)}")
 
 # for el in listA:
@@ -179,5 +187,5 @@ i = 0
 
 print(f"problem_dampener: {problem_dampener(listA, increments_list)}")
 
-print(f"Increments list (print2): {increments_list}")
+# print(f"Increments list (print2): {increments_list}")
 # print(f"List A (print 2): {listA}")
