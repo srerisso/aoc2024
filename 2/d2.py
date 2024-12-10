@@ -111,19 +111,18 @@ print(f"Number of secure lists: {count_safes}")
 # Problem Dampener
 
 # Cases where the Problem Dampener can remove a level :
-#   - Next element is equal than actual element. Then remove actual element.
-#   - There is a difference of sign between two adjacent elements. Then remove the element with the different sign.
+#   - Next element is equal than actual element (increment_list is 0). Then remove actual element.
+#   - There is a difference of sign between two adjacent elements of increments_list. Then remove the element with the different sign.
 
-# list_increments scenarios, to be analyzed by Problem Dampener:
+#  increments_list scenarios, to be analyzed by Problem Dampener:
 #
 # - all negative, no increment greater than 3 => Level is secure (1)
 # - all positive, no increment greater than 3 => Level is secure (1)
 # - all positive, but one negative, and no increment greater than 3 => Level secure (1) when negative is deleted
 # - all negative, but one positive and no increment greater than 3 => Level secure (1) when positive is deleted
-# - and increment greater than 3 => can it be removed ?
+# - and increment greater than 3 => can it be removed ?. NO, level is not secure (0)
 
-# list_incremental_dampener.
-# Given a list, returns all increments between elements
+# list_increments function. Given a list, returns all increments between elements
 def list_increments(eleA):
     inc = []
     i = 0
@@ -136,21 +135,21 @@ increments_list = []
 for el in listA:
     # print(f"List increments: {list_increments(el)}")
     increments_list.append(list_increments(el))
-
-# print(f"increments_list: {increments_list}")
-
-# def any_inc_change(listA):
     
 
 # function all_incs_below_4. Given a list, returns 1 if all increments are below 3 (in absolute value), 0 otherwise
 def all_incs_below_4(listA):
-    below = 1
+    below = True
     
     for i in range(len(listA) - 1):
         if abs(listA[i]) > 3:
-            below = 0
+            below = False
             break
     return below
+
+# function any_negative. Given a list, returns 1 if there is any negative number in the list, 0 otherwise
+def any_negative(lista) -> bool:
+    return any(x < 0 for x in lista)
 
 # function problem_dampener. Given a list of levels, and a list of increments of those levels, test if security checks are passed, and apply selected corrections to make levels secure
 def problem_dampener(listA, increments_list):
@@ -159,19 +158,29 @@ def problem_dampener(listA, increments_list):
     secure_list = listA
     secure_increments_list = increments_list
     
-    for inc_el in range(len(increments_list)-1):
-        if all_incs_below_4(increments_list[inc_el]) == 1:
-            secure = 1
-            print(f"List {increments_list[inc_el]} is secure")
+    for i in range(len(increments_list)-1):
+        if all_incs_below_4(increments_list[el]) == 1:
+            if (list_increase(increments_list[el]) == 1) and (not(any_negative(increments_list[el]))):
+                secure = 1
+                secure_list[i] = listA[i]
+                secure_increments_list[i] = increments_list[i]
+            else:
+                secure = 0
+                break
+            elif list_decrease(el) == 1:
+                secure = 1
+                secure_list[i] = listA[i]
+                secure_increments_list[i] = increments_list[i]
+            else:
+                secure = 0
+                break
         else:
             secure = 0
-            print(f"List {increments_list[inc_el]} is not secure")
-            del secure_increments_list[inc_el]
-            del secure_list[inc_el]
-        # i += 1
-    return secure_list, secure_increments_list
+            break
+        i += 1
 
-i = 0
+
+    return secure_list, secure_increments_list
 
 print(f"List A: {listA}")
 print(f"Increments_list: {increments_list}")
