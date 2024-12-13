@@ -137,7 +137,7 @@ for el in listA:
     increments_list.append(list_increments(el))
     
 
-# function all_incs_below_4. Given a list, returns 1 if all increments are below 3 (in absolute value), 0 otherwise
+# function all_incs_below_4. Given a list, returns 1 if all elements are below 3 (in absolute value), 0 otherwise
 def all_incs_below_4(listA):
     below = True
     
@@ -155,46 +155,56 @@ def find_negative(lista):
     for i in range(len(lista)-1):
         if lista[i] < 0:
             return i
-    return -1
+    return 0
 
 def find_positive(lista):
     for i in range(len(lista)-1):
         if lista[i] > 0:
             return i
-    return -1
-
+    return 0
 
 # function problem_dampener. Given a list of levels, and a list of increments of those levels, test if security checks are passed, and apply selected corrections to make levels secure
 def problem_dampener(listA, increments_list):
     secure = 0
     i = 0
+    j = 0
     secure_list = []
     secure_increments_list = []
     
-    for i in range(len(increments_list)-1): # i 0 to 5
+    for i in range(len(listA)-1): # i 0 to 5
         # increasing list
         if (list_increase(listA[i]) == 1):
             if (all_incs_below_4(increments_list[i]) == 0):
                 secure = 0
             elif (all_incs_below_4(increments_list[i]) == 1):
                 # check if there is any negative number in the list
-                if find_negative(increments_list[i]) != -1:
-                    del increments_list[(find_negative(increments_list[i]))]
+                if (find_negative(increments_list[i]) == 0):
+                    print(f"New Level secure {increments_list[i]}")
                     secure_list.append(listA[i])
                     secure_increments_list.append(increments_list[i])
+                elif (find_negative(increments_list[i]) > 0):
+                    del increments_list[(find_negative(increments_list[i]))]
+                    print(f"Found negative {increments_list[i]} in increasing list")
+                    secure_list.append(listA[i])
+                    secure_increments_list.append(increments_list[i])
+
                      
         # decreasing list                       
         elif (list_decrease(listA[i]) == 1):
             if (all_incs_below_4(increments_list[i]) == 0):
+                # print(f"List Decrease. Inc greater than 3 {increments_list[i]}")
                 secure = 0
             elif (all_incs_below_4(increments_list[i]) == 1):
+                print(f"List Decrease. All incs below 4 {increments_list[i]}")
                 # check if there is any positive number in the list
-                if find_positive(increments_list[i]) != -1:
-                    del increments_list[(find_positive(increments_list[i]))]
+                if (find_positive(increments_list[i]) == 0):
+                    # del increments_list[(find_positive(increments_list[i]))]
+                    print(f"New Level secure {increments_list[i]}")
                     secure_list.append(listA[i])
                     secure_increments_list.append(increments_list[i])
-                
-                
+        print(j)            
+        j += 1
+        
     return secure_list, secure_increments_list
 
 print(f"List A: {listA}")
